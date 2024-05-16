@@ -1,0 +1,31 @@
+@host=http://localhost:5147
+
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYmUzMDYzZC0xODA5LTRmOTEtODdhZC1hODA0OGU3Y2U2MzciLCJnaXZlbl9uYW1lIjoiTWF4IiwiZmFtaWx5X25hbWUiOiJTZXZlcm92IiwianRpIjoiM2VhMjE2NGMtNWZkOC00OTEzLTkwZDYtZGMxOWY1MzU4ODEwIiwiZXhwIjoxNzE1MzY3NDk4LCJpc3MiOiJUZXN0c0J1aWxkZXIiLCJhdWQiOiJUZXN0c0J1aWxkZXIifQ.yoZXDiQaQ1K90hFwmBVpe56cctjaspY52z_i4PErQZQ
+
+@hostId=asdf
+POST {{host}}/hosts/{{hostId}}/tests
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Integral expressions",
+    "description": "dsdsdsds",
+    "examples": [
+        {
+            "name":"new example",
+            "text": "a+b-c-a*2",
+            "baseAnswers": [
+                "a+b-c-a*2"
+            ],
+            "variants": [
+                {
+                    "number": "1",
+                    "expression": "2+5-3-2*2",
+                    "answers": [
+                        "2+5-3-2*2"
+                    ]
+                }
+            ]
+        }
+    ]
+}

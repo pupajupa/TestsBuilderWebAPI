@@ -1,0 +1,6 @@
+@TestsBuilder.Api_HostAddress = http://localhost:5147
+
+GET {{TestsBuilder.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

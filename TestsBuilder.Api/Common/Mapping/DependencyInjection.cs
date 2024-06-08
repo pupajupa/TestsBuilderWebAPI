@@ -9,7 +9,7 @@ namespace TestsBuilder.Api.Common.Mapping
         public static IServiceCollection AddMappings(this IServiceCollection services)
         {
             var config = TypeAdapterConfig.GlobalSettings;
-            config.Scan(Assembly.GetExecutingAssembly());
+            config.Scan(typeof(TestMappingConfig).Assembly);
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();
             return services;

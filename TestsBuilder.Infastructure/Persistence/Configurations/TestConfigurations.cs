@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Packaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -51,7 +52,8 @@ namespace TestsBuilder.Infastructure.Persistence.Configurations
             {
                 eb.ToTable("Examples");
 
-                eb.WithOwner().HasForeignKey("TestId");
+                eb.WithOwner()
+                    .HasForeignKey("TestId");
 
                 eb.HasKey("Id", "TestId");
 
@@ -69,40 +71,44 @@ namespace TestsBuilder.Infastructure.Persistence.Configurations
                     .HasMaxLength(100);
 
                 eb.Property<List<string>>("BaseAnswers") // Добавляем свойство BaseAnswers
-                    .HasColumnName("BaseAnswers")
-                    .IsRequired(); // Можно настроить как требуется
+                    .HasColumnName("BaseAnswers");
 
-                eb.OwnsMany(e => e.Variants, vb =>
-                {
-                    vb.ToTable("ExampleVariants");
+                eb.OwnsMany(
+                    s => s.Variants,
+                    vb => ConfigureExampleVariantsTable(vb));
 
-                    vb.WithOwner().HasForeignKey("ExampleId", "TestId");
-
-                    vb.HasKey(nameof(ExampleVariant.Id), "ExampleId", "TestId");
-
-                    vb.Property(v => v.Id)
-                        .HasColumnName("ExampleVariantId")
-                        .ValueGeneratedNever()
-                        .HasConversion(
-                            id => id.Value,
-                            value => ExampleVariantId.Create(value));
-
-                    vb.Property(v => v.Number)
-                        .HasMaxLength(3);
-
-                    vb.Property(v => v.Expression)
-                        .HasMaxLength(100);
-
-                    vb.Property<List<string>>("Answers") // Добавляем свойство Answers
-                        .HasColumnName("Answers");
-                });
-
-                eb.Navigation(e => e.Variants).Metadata.SetField("_variants");
-                eb.Navigation(e => e.Variants).UsePropertyAccessMode(PropertyAccessMode.Field);
+                eb
+                    .Navigation(s => s.Variants).Metadata
+                    .SetField("_variants");
             });
 
-            builder.Metadata.FindNavigation(nameof(Test.Examples))!
+            builder.Metadata
+                .FindNavigation(nameof(Test.Examples))!
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
+        }
+        private void ConfigureExampleVariantsTable(OwnedNavigationBuilder<Example, ExampleVariant> vb)
+        {
+            vb.ToTable("ExampleVariants");
+
+            vb.WithOwner().HasForeignKey("ExampleId", "TestId");
+
+            vb.HasKey(nameof(ExampleVariant.Id), "ExampleId", "TestId");
+
+            vb.Property(v => v.Id)
+                .HasColumnName("ExampleVariantId")
+                .ValueGeneratedOnAdd()
+                .HasConversion(
+                    id => id.Value,
+                    value => ExampleVariantId.Create(value));
+
+            vb.Property(v => v.Number)
+                            .HasMaxLength(3);
+
+            vb.Property(v => v.Expression)
+                            .HasMaxLength(100);
+
+            vb.Property<List<string>>("Answers") // Добавляем свойство Answers
+                            .HasColumnName("Answers");
         }
     }
 }

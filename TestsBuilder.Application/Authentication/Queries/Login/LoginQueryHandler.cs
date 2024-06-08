@@ -5,7 +5,7 @@ using TestsBuilder.Application.Authentication.Queries.Login;
 using TestsBuilder.Application.Common.Interfaces.Authentication;
 using TestsBuilder.Application.Common.Interfaces.Persistence;
 using TestsBuilder.Domain.Common.Errors;
-using TestsBuilder.Domain.Entities;
+using TestsBuilder.Domain.User;
 
 namespace TestsBuilder.Application.Authentication.Commands.Login
 {

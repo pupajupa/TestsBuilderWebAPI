@@ -5,7 +5,7 @@ using TestsBuilder.Domain.Test;
 namespace TestsBuilder.Application.Tests.Commands.CreateTest
 {
     public record CreateTestCommand(
-        string HostId,
+        Guid HostId,
         string Name,
         string Description,
         List<ExampleCommand> Examples) : IRequest<ErrorOr<Test>>;
@@ -19,5 +19,6 @@ namespace TestsBuilder.Application.Tests.Commands.CreateTest
     public record ExampleVariantCommand(
         string Number,
         string Expression,
-        List<string> Answers);
+        List<string> Answers,
+        string CorrectAnswer);
 }

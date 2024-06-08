@@ -2,8 +2,9 @@
 
 namespace TestsBuilder.Domain.Test.ValueObjects
 {
-    public sealed class TestId:ValueObject
+    public sealed class TestId : AggregateRootId<Guid>
     {
+        public override Guid Value { get; protected set; }
         private TestId(Guid value)
         {
             Value = value;
@@ -18,8 +19,6 @@ namespace TestsBuilder.Domain.Test.ValueObjects
         {
             return new TestId(value);
         }
-
-        public Guid Value { get; }
 
         public override IEnumerable<object> GetEqualityComponents()
         {

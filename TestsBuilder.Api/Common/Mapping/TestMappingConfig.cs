@@ -12,19 +12,29 @@ namespace TestsBuilder.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<(CreateTestRequest Request, string HostId), CreateTestCommand>()
+            config.ForType<Test, TestResponse>()
+                .Map(dest => dest.Id, src => GetTestId(src))
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.Description, src => src.Description)
+                .Map(dest => dest.HostId, src => src.HostId.Value)
+                .Map(dest=>dest.Examples,src=>src.Examples);
+
+            config.ForType<(CreateTestRequest Request, Guid HostId), CreateTestCommand>()
                 .Map(dest => dest.HostId, src => src.HostId)
-                .Map(dest => dest, src => src.Request);
+                .Map(dest => dest.Name, src => src.Request.Name)
+                .Map(dest => dest.Description, src => src.Request.Description)
+                .Map(dest=>dest.Examples,src=>src.Request.Examples);
 
-            config.NewConfig<Test, TestResponse>()
-                .Map(dest => dest.Id, src => src.Id.Value)
-                .Map(dest => dest.HostId, src => src.HostId.Value);
-
-            config.NewConfig<Example, ExampleResponse>()
+            config.ForType<Example, ExampleResponse>()
                 .Map(dest => dest.Id, src => src.Id.Value);
 
-            config.NewConfig<ExampleVariant, ExampleVariantResponse>()
+            config.ForType<ExampleVariant, ExampleVariantResponse>()
                 .Map(dest => dest.Id, src => src.Id.Value);
+        }
+
+        private Guid GetTestId(Test test)
+        {
+            return test.Id.Value;
         }
     }
 }

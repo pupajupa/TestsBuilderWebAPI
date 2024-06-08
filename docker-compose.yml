@@ -1,0 +1,29 @@
+services:
+  sql-data:
+    image: mcr.microsoft.com/mssql/server:2022-latest  
+    container_name: sql-data
+    restart: always
+    environment:
+      - SA_PASSWORD=1969Lusi
+      - ACCEPT_EULA=Y
+      - HOMEBREW_NO_ENV_FILTERING=1
+    ports:
+      - "1433:1433"
+    networks:
+      - network
+    volumes:
+      - ./data:/var/lib/sqlserver
+  
+  api:
+    build:
+      context: .
+    networks:
+      - network
+    ports:
+      - "5000:8080"
+    depends_on:
+      - sql-data
+      
+networks:
+  network:
+    driver: bridge

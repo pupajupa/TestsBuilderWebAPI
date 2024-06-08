@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TestsBuilder.Contracts.Tests
+﻿namespace TestsBuilder.Contracts.Tests
 {
     public record TestResponse(
         string Id,
@@ -15,6 +9,7 @@ namespace TestsBuilder.Contracts.Tests
 
     public record ExampleResponse(
         string Id,
+        string Name,
         string Text,
         List<string> BaseAnswers,
         List<ExampleVariantResponse> Variants);
@@ -23,5 +18,6 @@ namespace TestsBuilder.Contracts.Tests
         string Id,
         string Number,
         string Expression,
-        List<string> Answers);
+        List<string> Answers,
+        string CorrectAnswer);
 }

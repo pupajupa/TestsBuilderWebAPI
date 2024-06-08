@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestsBuilder.Domain.Entities;
+using TestsBuilder.Domain.User;
 
 namespace TestsBuilder.Application.Common.Interfaces.Authentication
 {

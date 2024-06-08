@@ -12,8 +12,8 @@ using TestsBuilder.Infastructure.Persistence;
 namespace TestsBuilder.Infastructure.Migrations
 {
     [DbContext(typeof(TestsBuilderDbContext))]
-    [Migration("20240516103215_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240607213526_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,31 +21,60 @@ namespace TestsBuilder.Infastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("TestsBuilder.Domain.Test.Test", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<Guid>("HostId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Tests", (string)null);
+                });
+
+            modelBuilder.Entity("TestsBuilder.Domain.User.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TestsBuilder.Domain.Test.Test", b =>
@@ -53,26 +82,26 @@ namespace TestsBuilder.Infastructure.Migrations
                     b.OwnsMany("TestsBuilder.Domain.Test.Entities.Example", "Examples", b1 =>
                         {
                             b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier")
+                                .HasColumnType("char(36)")
                                 .HasColumnName("ExampleId");
 
                             b1.Property<Guid>("TestId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("char(36)");
 
                             b1.Property<string>("BaseAnswers")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
+                                .HasColumnType("longtext")
                                 .HasColumnName("BaseAnswers");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("varchar(100)");
 
                             b1.Property<string>("Text")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("varchar(100)");
 
                             b1.HasKey("Id", "TestId");
 
@@ -86,29 +115,34 @@ namespace TestsBuilder.Infastructure.Migrations
                             b1.OwnsMany("TestsBuilder.Domain.Test.Entities.ExampleVariant", "Variants", b2 =>
                                 {
                                     b2.Property<Guid>("Id")
-                                        .HasColumnType("uniqueidentifier")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("char(36)")
                                         .HasColumnName("ExampleVariantId");
 
                                     b2.Property<Guid>("ExampleId")
-                                        .HasColumnType("uniqueidentifier");
+                                        .HasColumnType("char(36)");
 
                                     b2.Property<Guid>("TestId")
-                                        .HasColumnType("uniqueidentifier");
+                                        .HasColumnType("char(36)");
 
                                     b2.Property<string>("Answers")
                                         .IsRequired()
-                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnType("longtext")
                                         .HasColumnName("Answers");
+
+                                    b2.Property<string>("CorrectAnswer")
+                                        .IsRequired()
+                                        .HasColumnType("longtext");
 
                                     b2.Property<string>("Expression")
                                         .IsRequired()
                                         .HasMaxLength(100)
-                                        .HasColumnType("nvarchar(100)");
+                                        .HasColumnType("varchar(100)");
 
                                     b2.Property<string>("Number")
                                         .IsRequired()
                                         .HasMaxLength(3)
-                                        .HasColumnType("nvarchar(3)");
+                                        .HasColumnType("varchar(3)");
 
                                     b2.HasKey("Id", "ExampleId", "TestId");
 

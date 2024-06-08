@@ -21,7 +21,7 @@ namespace TestsBuilder.Application.Tests.Commands.CreateTest
             await Task.CompletedTask;
             //Create test
             var test = Test.Create(
-                hostId: HostId.CreateUnique(),
+                hostId: HostId.Create(request.HostId),
                 name: request.Name,
                 description: request.Description,
                 examples: request.Examples.ConvertAll(example => Example.Create(
@@ -31,7 +31,8 @@ namespace TestsBuilder.Application.Tests.Commands.CreateTest
                     variants: example.Variants.ConvertAll(variant => ExampleVariant.Create(
                         number: variant.Number,
                         expression: variant.Expression,
-                        answers: variant.Answers)))));
+                        answers: variant.Answers,
+                        correctAnswer: variant.CorrectAnswer)))));
             //Persist test
             _testRepository.Add(test);
 

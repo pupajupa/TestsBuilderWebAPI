@@ -2,8 +2,9 @@
 
 namespace TestsBuilder.Domain.Host.ValueObjects
 {
-    public class HostId : ValueObject
+    public class HostId : AggregateRootId<Guid>
     {
+        public override Guid Value { get; protected set; }
         private HostId(Guid value)
         {
             Value = value;
@@ -13,9 +14,6 @@ namespace TestsBuilder.Domain.Host.ValueObjects
         {
             return new HostId(Guid.NewGuid());
         }
-
-        public Guid Value { get; }
-
         public static HostId Create(Guid value)
         {
             return new HostId(value);

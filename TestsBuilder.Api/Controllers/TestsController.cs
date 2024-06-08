@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TestsBuilder.Application.Tests.Commands.CreateTest;
@@ -23,9 +24,11 @@ namespace TestsBuilder.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTest(
             CreateTestRequest request,
-            string hostId)
+            Guid hostId)
         {
-            var command = _mapper.Map<CreateTestCommand>((request, hostId));
+
+            var command = (request, hostId).Adapt<CreateTestCommand>();
+            command = _mapper.Map<CreateTestCommand>((request, hostId));
 
             var createTestResult = await _mediator.Send(command);
             

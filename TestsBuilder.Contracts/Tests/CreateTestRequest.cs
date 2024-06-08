@@ -13,11 +13,13 @@ namespace TestsBuilder.Contracts.Tests
 
     public record Example(
         string Text,
+        string Name,
         List<string> BaseAnswers,
         List<ExampleVariant> Variants);
 
     public record ExampleVariant(
         string Number,
         string Expression,
-        List<string> Answers);
+        List<string> Answers,
+        string CorrectAnswer);
 }

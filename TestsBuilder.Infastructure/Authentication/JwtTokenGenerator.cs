@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using TestsBuilder.Application.Common.Interfaces.Authentication;
 using TestsBuilder.Application.Common.Interfaces.Services;
-using TestsBuilder.Domain.Entities;
+using TestsBuilder.Domain.User;
 
 namespace TestsBuilder.Infastructure.Authentication
 {
@@ -30,7 +30,7 @@ namespace TestsBuilder.Infastructure.Authentication
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub,user.Id.Value.ToString()),
                 new Claim(JwtRegisteredClaimNames.GivenName,user.FirstName),
                 new Claim(JwtRegisteredClaimNames.FamilyName,user.LastName),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),

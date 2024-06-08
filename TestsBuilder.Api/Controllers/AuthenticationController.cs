@@ -29,10 +29,10 @@ public class AuthenticationController : ApiController
     public async Task<IActionResult> Register(RegisterRequest request)
     {
         var command = _mapper.Map<RegisterCommand>(request);
-        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+        var authenticationResult = await _mediator.Send(command);
 
-        return authResult.Match(
-            registerResult => Ok(_mapper.Map<AuthenticationResponse>(registerResult)),
+        return authenticationResult.Match(
+            authenticationResult => Ok(_mapper.Map<AuthenticationResponse>(authenticationResult)),
             errors => Problem(errors));
     }
 
@@ -49,7 +49,7 @@ public class AuthenticationController : ApiController
                 title: authResult.FirstError.Description);
         }
         return authResult.Match(
-            authResult =>Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
             errors => Problem(errors));
     }
 }

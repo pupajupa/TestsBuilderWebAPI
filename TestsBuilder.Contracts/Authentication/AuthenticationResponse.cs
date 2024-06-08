@@ -6,5 +6,5 @@
         string LastName,
         string Email,
         string Token
-        );
+    );
 }

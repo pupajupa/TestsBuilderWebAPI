@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestsBuilder.Application.Common.Interfaces.Persistence;
-using TestsBuilder.Domain.Entities;
+using TestsBuilder.Domain.User;
 
 namespace TestsBuilder.Infastructure.Persistence.Repositories
 {

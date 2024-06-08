@@ -10,19 +10,20 @@ using TestsBuilder.Application.Common.Interfaces.Persistence;
 using TestsBuilder.Application.Common.Interfaces.Services;
 using TestsBuilder.Infastructure.Authentication;
 using TestsBuilder.Infastructure.Persistence;
+using TestsBuilder.Infastructure.Persistence.Interceptors;
 using TestsBuilder.Infastructure.Persistence.Repositories;
 using TestsBuilder.Infastructure.Services;
 
 namespace TestsBuilder.Infastructure;
 
-public static class DependencyInjection
+public static class DependencyInjectionRegister
 {
-    public static IServiceCollection AddInfastructure(
+    public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        ConfigurationManager configuration)
+        IConfiguration configration)
     {
         services
-            .AddAuth(configuration)
+            .AddAuth(configration)
             .AddPersistance();
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -30,26 +31,28 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddPersistance(
-        this IServiceCollection services)
+    public static IServiceCollection AddPersistance(this IServiceCollection services)
     {
         services.AddDbContext<TestsBuilderDbContext>(options =>
-    options.UseSqlServer("Server=sql-data;Database=BuberDinner;User Id=sa;Password=amiko123!;TrustServerCertificate=True"));
+            options.UseMySql("Server=sql-data;Database=TestsBuilderDB;User ID=sa;Password=1969Lusi",
+                             new MySqlServerVersion(new Version(8, 0, 23)))); // Specify the MySQL server version here
 
+        services.AddScoped<PublishDomainEventsInterceptor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
 
         return services;
     }
 
+
     public static IServiceCollection AddAuth(
         this IServiceCollection services,
-        ConfigurationManager configuration)
+        IConfiguration configration)
     {
-        var JwtSettings = new JwtSettings();
-        configuration.Bind(JwtSettings.SectionName, JwtSettings);
+        var jwtSettings = new JwtSettings();
+        configration.Bind(JwtSettings.SectionName, jwtSettings);
 
-        services.AddSingleton(Options.Create(JwtSettings));
+        services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
@@ -59,10 +62,10 @@ public static class DependencyInjection
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = JwtSettings.Issuer,
-                ValidAudience = JwtSettings.Audience,
-                IssuerSigningKey=new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(JwtSettings.Secret))
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSettings.Secret))
             });
 
         return services;

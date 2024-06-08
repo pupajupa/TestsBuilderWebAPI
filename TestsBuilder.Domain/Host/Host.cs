@@ -9,7 +9,7 @@ using TestsBuilder.Domain.Test.ValueObjects;
 using TestsBuilder.Domain.User.ValueObjects;
 namespace TestsBuilder.Domain.Host
 {
-    public sealed class Host : AggregateRoot<HostId>
+    public sealed class Host : AggregateRoot<HostId,Guid>
     {
         private readonly List<TestId> _testIds = new();
 

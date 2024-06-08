@@ -53,6 +53,7 @@ namespace TestsBuilder.Api.Common.Errors
             string? detail = null, 
             string? instance = null)
         {
+            statusCode ??= 500;
             var problemDetails = new ValidationProblemDetails(modelStateDictionary)
             {
                 Status = statusCode,

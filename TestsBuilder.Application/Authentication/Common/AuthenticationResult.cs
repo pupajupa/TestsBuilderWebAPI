@@ -1,4 +1,4 @@
-﻿using TestsBuilder.Domain.Entities;
+﻿using TestsBuilder.Domain.User;
 
 namespace TestsBuilder.Application.Authentication.Common
 {
